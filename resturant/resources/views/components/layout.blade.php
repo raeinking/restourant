@@ -41,6 +41,15 @@
     <link href="sass/responsive.css" rel="stylesheet">
 
 
+    {{-- pos main setting --}}
+    <!-- Google Fonts - Jost -->
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome CSS -->
+    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Custom Font Icons -->
+    <link href="/vendor/icomoon/css/iconfont.min.css" rel="stylesheet">
     <head>
     <body>
 

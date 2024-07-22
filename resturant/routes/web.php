@@ -27,3 +27,6 @@ Route::get('/addProduct', function () {
 Route::get('/products', function () {
     return view('products');
 });
+Route::get('/pos', function () {
+    return view('pos');
+});

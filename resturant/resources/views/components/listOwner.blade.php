@@ -4,7 +4,7 @@
         <img src="/images/logo-icon.png" class="logo-img" alt="">
       </div>
       <div class="logo-name flex-grow-1">
-        <h5 class="mb-0">Maxton</h5>
+        <h5 class="mb-0">Rayan</h5>
       </div>
       <div class="sidebar-close">
         <span class="material-icons-outlined">close</span>
@@ -14,10 +14,10 @@
         <!--navigation-->
         <ul class="metismenu" id="sidenav">
           <li>
-            <a href="/" class="">
+            <a href="/">
               <div class="parent-icon"><i class="material-icons-outlined">home</i>
               </div>
-              <div class="menu-title">Dashboard</div>
+              <div class="menu-title">Dashbord</div>
             </a>
           </li>
           <li>
@@ -65,7 +65,7 @@
 
           <li>
             <a href="javascript:;" class="has-arrow">
-              <div class="parent-icon"><i class="material-icons-outlined">shopping_bag</i>
+              <div class="parent-icon"><i class="material-icons-outlined">restaurant</i>
 
               </div>
               <div class="menu-title">Resturant</div>
