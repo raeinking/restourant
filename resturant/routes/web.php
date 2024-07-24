@@ -9,6 +9,9 @@ Route::get('/', function () {
 Route::get('/login', function () {
     return view('login');
 });
+Route::get('/createuser', function () {
+    return view('rigister');
+});
 
 Route::get('/psforget', function () {
     return view('forgetPassword');
