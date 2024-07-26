@@ -14,15 +14,16 @@
                   <p class="mb-0">Enter your credentials to login your account</p>
 
                   <div class="form-body my-5">
-										<form class="row g-3">
+										<form id="loginForm" class="row g-3">
+                                            <input type="hidden" name="database" value="restaurant">
 											<div class="col-12">
 												<label for="inputEmailAddress" class="form-label">Email</label>
-												<input type="email" class="form-control" id="inputEmailAddress" placeholder="jhon@example.com">
+												<input type="email" class="form-control" name="email" id="inputEmailAddress" placeholder="jhon@example.com">
 											</div>
 											<div class="col-12">
 												<label for="inputChoosePassword" class="form-label">Password</label>
 												<div class="input-group" id="show_hide_password">
-													<input type="password" class="form-control border-end-0" id="inputChoosePassword" value="12345678" placeholder="Enter Password">
+													<input type="password" class="form-control border-end-0" id="inputChoosePassword" name="password" placeholder="Enter Password">
                           <a href="javascript:;" class="input-group-text bg-transparent"><i class="bi bi-eye-slash-fill"></i></a>
 												</div>
 											</div>
@@ -74,6 +75,42 @@
             $('#show_hide_password i').addClass("bi-eye-fill");
           }
         });
-      });
+
+        document.getElementById('loginForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+        const data = {
+            email: formData.get('email'),
+            password: formData.get('password'),
+            database: formData.get('database')
+        };
+
+        fetch('{{ env('SERVER_URL') }}/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Login successful ✅') {
+                console.log('Success:', data);
+                alert('Login successful ✅');
+                localStorage.setItem('token', data.token); // Store the token
+                // window.location.href = '/';
+            } else {
+                console.log('Error:', data);
+                alert('Login failed ❌: ' + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Login failed ❌');
+        });
+    });
+});
     </script>
 @endsection
