@@ -2,8 +2,6 @@
 
 @section('main')
 
-
-
 <div class="container-fluid my-5">
     <div class="row">
        <div class="col-12 col-md-8 col-lg-6 col-xl-5 col-xxl-5 mx-auto">
@@ -81,6 +79,10 @@
 
 <!--authentication-->
 
+   <!-- Loading indicator -->
+   <div id="loading" class="loader-wrapper" style="display:none;">
+    <div class="loader"></div>
+</div>
 
 
 
@@ -105,6 +107,8 @@
 
   document.getElementById('registerForm').addEventListener('submit', function(event) {
     event.preventDefault();
+    document.getElementById('loading').style.display = 'flex'; // Show loading indicator
+
 
     const form = event.target;
     const formData = new FormData(form);
@@ -126,15 +130,23 @@
     })
     .then(response => response.json())
     .then(data => {
+    document.getElementById('loading').style.display = 'none'; // Hide loading indicator
+      if (data.message === 'Registration successful ✅') {
         console.log('Success:', data);
         alert('Registration successful ✅');
+        // localStorage.setItem('token', data.token); // Store the token
         window.location.href = '/';
+      } else {
+        console.log('Error:', data);
+        alert('Login failed ❌: ' + data.message);
+      }
     })
     .catch((error) => {
-        console.error('Error:', error);
-        alert('Registration failed ❌: ',data );
+        document.getElementById('loading').style.display = 'none'; // Hide loading indicator
+      console.error('Error:', error);
+      alert('Login failed ❌ error: ' + error.message);
     });
-});
+  });
 </script>
 
 @endsection
