@@ -1572,6 +1572,7 @@ form select.error:focus {
 }
 
 .loader {
+    z-index: 9999; /* Ensure it overlays other content */
     width: 50px;
     padding: 8px;
     aspect-ratio: 1;

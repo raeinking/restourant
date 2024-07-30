@@ -109,7 +109,6 @@ con.connect(function(err) {
 // Route to handle user login
 app.post('/login', (req, res) => {
   const { email, password, database } = req.body;
-  console.log(req.body);
 
   if (!email || !password || !database) {
       return res.status(400).json({ message: 'All fields are required' });
@@ -170,11 +169,78 @@ app.post('/login', (req, res) => {
                       username: user.username,
                       email: user.email,
                       role: user.role,
-                  }
+                    }
+                  });
+                });
               });
+            });
           });
-      });
-  });
-});
+          
+          app.post('/loginwithtoken', (req, res) => {
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split(' ')[1]; // Extract token from 'Bearer <token>'
+            const { database } = req.body;
+          
+            if (!token || !database) {
+              return res.status(400).json({ message: 'Token and database are required' });
+            }
+          
+            try {
+              // Decode the token
+              const decoded = jwt.verify(token, process.env.JWT_SECRET);
+              const userId = decoded.id;
+              const userEmail = decoded.email;
+          
+              // Connect to the specified database
+              const dbCon = mysql.createConnection({
+                host: process.env.MYSQL_HOST,
+                user: process.env.MYSQL_USER,
+                password: process.env.MYSQL_PASSWORD,
+                database: database,
+              });
+          
+              dbCon.connect((err) => {
+                if (err) {
+                  console.error('Error connecting to the database:', err);
+                  return res.status(500).json({ message: 'Database connection error' });
+                }
+          
+                const queryUserSql = 'SELECT * FROM users WHERE id = ? AND email = ?';
+                dbCon.query(queryUserSql, [userId, userEmail], (err, results) => {
+                  dbCon.end();
+                  if (err) {
+                    console.error('Error querying data:', err);
+                    return res.status(500).json({ message: 'Database query error' });
+                  }
+          
+                  if (results.length === 0) {
+                    return res.status(400).json({ message: 'User not found' });
+                  }
+          
+                  const user = results[0];
+          
+                  if (user.is_banned) {
+                    return res.status(403).json({ message: 'User is banned' });
+                  }
+          
+                  res.status(200).json({
+                    message: 'User authenticated successfully',
+                    user: {
+                      id: user.id,
+                      email: user.email,
+                      username: user.username,
+                      role: user.role
+                    }
+                  });
+                });
+              });
+          
+            } catch (error) {
+              console.error('Token validation error:', error);
+              return res.status(401).json({ message: 'Invalid token' });
+            }
+          });
+          
+
 //   host 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
